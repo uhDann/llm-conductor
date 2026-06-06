@@ -1,0 +1,510 @@
+{
+  "totals": {
+    "transcripts": 505,
+    "active_days": 54,
+    "first_day": "2026-03-25",
+    "last_day": "2026-06-06",
+    "assistant_turns": 63185,
+    "user_turns": 40332,
+    "total_turns": 103517,
+    "agents_spawned": 959,
+    "web_calls": 2294,
+    "input_tokens": 3681893,
+    "output_tokens": 57426740,
+    "cache_read_tokens": 18704703935,
+    "cache_create_tokens": 362574732,
+    "total_tokens": 19128387300,
+    "distinct_models": 4,
+    "distinct_tools": 36
+  },
+  "models": [
+    {
+      "name": "claude-opus-4-7",
+      "count": 50249
+    },
+    {
+      "name": "claude-opus-4-8",
+      "count": 6704
+    },
+    {
+      "name": "claude-opus-4-6",
+      "count": 3122
+    },
+    {
+      "name": "claude-haiku-4-5-20251001",
+      "count": 2703
+    }
+  ],
+  "tools": [
+    {
+      "name": "Bash",
+      "count": 16652
+    },
+    {
+      "name": "Read",
+      "count": 5885
+    },
+    {
+      "name": "Edit",
+      "count": 4603
+    },
+    {
+      "name": "Write",
+      "count": 1581
+    },
+    {
+      "name": "WebSearch",
+      "count": 1375
+    },
+    {
+      "name": "TaskUpdate",
+      "count": 1146
+    },
+    {
+      "name": "WebFetch",
+      "count": 919
+    },
+    {
+      "name": "TaskCreate",
+      "count": 621
+    },
+    {
+      "name": "ToolSearch",
+      "count": 452
+    },
+    {
+      "name": "Agent",
+      "count": 338
+    },
+    {
+      "name": "StructuredOutput",
+      "count": 219
+    },
+    {
+      "name": "ScheduleWakeup",
+      "count": 150
+    },
+    {
+      "name": "Glob",
+      "count": 107
+    },
+    {
+      "name": "Monitor",
+      "count": 81
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2026-03-25",
+      "events": 1043,
+      "out_tokens": 98028
+    },
+    {
+      "date": "2026-04-06",
+      "events": 868,
+      "out_tokens": 71808
+    },
+    {
+      "date": "2026-04-07",
+      "events": 1346,
+      "out_tokens": 195954
+    },
+    {
+      "date": "2026-04-08",
+      "events": 315,
+      "out_tokens": 47360
+    },
+    {
+      "date": "2026-04-10",
+      "events": 6,
+      "out_tokens": 96
+    },
+    {
+      "date": "2026-04-12",
+      "events": 198,
+      "out_tokens": 14329
+    },
+    {
+      "date": "2026-04-13",
+      "events": 596,
+      "out_tokens": 114995
+    },
+    {
+      "date": "2026-04-14",
+      "events": 1316,
+      "out_tokens": 272717
+    },
+    {
+      "date": "2026-04-15",
+      "events": 1038,
+      "out_tokens": 226951
+    },
+    {
+      "date": "2026-04-21",
+      "events": 322,
+      "out_tokens": 98523
+    },
+    {
+      "date": "2026-04-23",
+      "events": 319,
+      "out_tokens": 242883
+    },
+    {
+      "date": "2026-04-24",
+      "events": 486,
+      "out_tokens": 162384
+    },
+    {
+      "date": "2026-04-25",
+      "events": 1289,
+      "out_tokens": 763861
+    },
+    {
+      "date": "2026-04-26",
+      "events": 824,
+      "out_tokens": 500096
+    },
+    {
+      "date": "2026-04-27",
+      "events": 938,
+      "out_tokens": 367261
+    },
+    {
+      "date": "2026-04-28",
+      "events": 845,
+      "out_tokens": 443684
+    },
+    {
+      "date": "2026-04-29",
+      "events": 2553,
+      "out_tokens": 1550439
+    },
+    {
+      "date": "2026-04-30",
+      "events": 4499,
+      "out_tokens": 1841719
+    },
+    {
+      "date": "2026-05-01",
+      "events": 7909,
+      "out_tokens": 3587632
+    },
+    {
+      "date": "2026-05-02",
+      "events": 1178,
+      "out_tokens": 502404
+    },
+    {
+      "date": "2026-05-03",
+      "events": 1873,
+      "out_tokens": 1343257
+    },
+    {
+      "date": "2026-05-04",
+      "events": 4951,
+      "out_tokens": 3065684
+    },
+    {
+      "date": "2026-05-05",
+      "events": 4347,
+      "out_tokens": 3259667
+    },
+    {
+      "date": "2026-05-06",
+      "events": 3086,
+      "out_tokens": 1802572
+    },
+    {
+      "date": "2026-05-07",
+      "events": 7502,
+      "out_tokens": 3395501
+    },
+    {
+      "date": "2026-05-08",
+      "events": 4210,
+      "out_tokens": 2625043
+    },
+    {
+      "date": "2026-05-09",
+      "events": 3488,
+      "out_tokens": 1153999
+    },
+    {
+      "date": "2026-05-10",
+      "events": 6726,
+      "out_tokens": 2609715
+    },
+    {
+      "date": "2026-05-11",
+      "events": 4154,
+      "out_tokens": 1799831
+    },
+    {
+      "date": "2026-05-12",
+      "events": 4196,
+      "out_tokens": 1888343
+    },
+    {
+      "date": "2026-05-13",
+      "events": 7079,
+      "out_tokens": 3617334
+    },
+    {
+      "date": "2026-05-14",
+      "events": 3293,
+      "out_tokens": 1257321
+    },
+    {
+      "date": "2026-05-15",
+      "events": 3221,
+      "out_tokens": 1137601
+    },
+    {
+      "date": "2026-05-16",
+      "events": 134,
+      "out_tokens": 53451
+    },
+    {
+      "date": "2026-05-17",
+      "events": 985,
+      "out_tokens": 543310
+    },
+    {
+      "date": "2026-05-18",
+      "events": 2801,
+      "out_tokens": 1623180
+    },
+    {
+      "date": "2026-05-19",
+      "events": 1996,
+      "out_tokens": 1084356
+    },
+    {
+      "date": "2026-05-20",
+      "events": 902,
+      "out_tokens": 568789
+    },
+    {
+      "date": "2026-05-21",
+      "events": 643,
+      "out_tokens": 164907
+    },
+    {
+      "date": "2026-05-22",
+      "events": 1131,
+      "out_tokens": 806594
+    },
+    {
+      "date": "2026-05-23",
+      "events": 39,
+      "out_tokens": 74851
+    },
+    {
+      "date": "2026-05-25",
+      "events": 2423,
+      "out_tokens": 2436438
+    },
+    {
+      "date": "2026-05-26",
+      "events": 493,
+      "out_tokens": 396785
+    },
+    {
+      "date": "2026-05-27",
+      "events": 7395,
+      "out_tokens": 2990877
+    },
+    {
+      "date": "2026-05-28",
+      "events": 533,
+      "out_tokens": 67839
+    },
+    {
+      "date": "2026-05-29",
+      "events": 1232,
+      "out_tokens": 606041
+    },
+    {
+      "date": "2026-05-30",
+      "events": 119,
+      "out_tokens": 87060
+    },
+    {
+      "date": "2026-05-31",
+      "events": 2957,
+      "out_tokens": 1525714
+    },
+    {
+      "date": "2026-06-01",
+      "events": 1271,
+      "out_tokens": 751797
+    },
+    {
+      "date": "2026-06-02",
+      "events": 1200,
+      "out_tokens": 970265
+    },
+    {
+      "date": "2026-06-03",
+      "events": 1678,
+      "out_tokens": 809908
+    },
+    {
+      "date": "2026-06-04",
+      "events": 5308,
+      "out_tokens": 1208156
+    },
+    {
+      "date": "2026-06-05",
+      "events": 350,
+      "out_tokens": 229772
+    },
+    {
+      "date": "2026-06-06",
+      "events": 505,
+      "out_tokens": 367658
+    }
+  ],
+  "projects": [
+    {
+      "label": "Orchestration & personal automation",
+      "out_tokens": 25715964,
+      "agents": 622,
+      "turns": 19362
+    },
+    {
+      "label": "Collaborative multi-agent build",
+      "out_tokens": 17019742,
+      "agents": 247,
+      "turns": 16407
+    },
+    {
+      "label": "Agentic dev sandbox",
+      "out_tokens": 7768327,
+      "agents": 59,
+      "turns": 4595
+    },
+    {
+      "label": "Background workflows",
+      "out_tokens": 4513714,
+      "agents": 7,
+      "turns": 20546
+    },
+    {
+      "label": "Financial knowledge-graph engine",
+      "out_tokens": 1425323,
+      "agents": 6,
+      "turns": 174
+    },
+    {
+      "label": "Robotics perception (SLAM)",
+      "out_tokens": 910294,
+      "agents": 18,
+      "turns": 1991
+    },
+    {
+      "label": "Spatial-AI experiment",
+      "out_tokens": 73376,
+      "agents": 0,
+      "turns": 110
+    }
+  ],
+  "hours": [
+    {
+      "hour": 0,
+      "count": 1424
+    },
+    {
+      "hour": 1,
+      "count": 886
+    },
+    {
+      "hour": 2,
+      "count": 900
+    },
+    {
+      "hour": 3,
+      "count": 569
+    },
+    {
+      "hour": 4,
+      "count": 537
+    },
+    {
+      "hour": 5,
+      "count": 515
+    },
+    {
+      "hour": 6,
+      "count": 619
+    },
+    {
+      "hour": 7,
+      "count": 1752
+    },
+    {
+      "hour": 8,
+      "count": 6217
+    },
+    {
+      "hour": 9,
+      "count": 6937
+    },
+    {
+      "hour": 10,
+      "count": 9001
+    },
+    {
+      "hour": 11,
+      "count": 8159
+    },
+    {
+      "hour": 12,
+      "count": 10302
+    },
+    {
+      "hour": 13,
+      "count": 10486
+    },
+    {
+      "hour": 14,
+      "count": 10135
+    },
+    {
+      "hour": 15,
+      "count": 11499
+    },
+    {
+      "hour": 16,
+      "count": 8324
+    },
+    {
+      "hour": 17,
+      "count": 6593
+    },
+    {
+      "hour": 18,
+      "count": 2822
+    },
+    {
+      "hour": 19,
+      "count": 3684
+    },
+    {
+      "hour": 20,
+      "count": 3181
+    },
+    {
+      "hour": 21,
+      "count": 6546
+    },
+    {
+      "hour": 22,
+      "count": 4232
+    },
+    {
+      "hour": 23,
+      "count": 4789
+    }
+  ]
+}
