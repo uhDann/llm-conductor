@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>usage record — danila kozlov</title>
+<title>usage record · danila kozlov</title>
 <meta name="description" content="A plain record, read back from my own session logs: how the work actually got done with a model in the loop.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
   ::selection{background:#16160f;color:var(--bg)}
   .mono{font-family:var(--mono)}
 
-  /* top bar — echoes the site nav */
+  /* top bar, echoes the site nav */
   .topbar{display:flex;justify-content:space-between;align-items:center;
     padding:26px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em}
   .topbar .name{font-weight:500;text-transform:uppercase;letter-spacing:.18em}
@@ -122,18 +122,18 @@
   <header>
     <div class="tag"><span class="dot"></span>claude code · personal usage record</div>
     <h1>a plain record of how the work actually got done.</h1>
-    <p class="lede">Read back from my own session logs over two and a half months — token counts
-      and tool calls only, <b>no content of any kind</b>. Not a pitch; a measurement.</p>
+    <p class="lede">Read back from my own session logs over two and a half months. Token counts
+      and tool calls only, <b>no content of any kind</b>. I built it to see how I actually work.</p>
 
     <div class="figs" id="figs"></div>
-    <div class="windowline" id="windowline">—</div>
+    <div class="windowline" id="windowline"></div>
   </header>
 
   <section>
     <div class="sec-h"><span class="idx">[ 01 ]</span><h2>the shape of it</h2></div>
-    <p class="note">Daily output tokens. The first six weeks are faint for a reason — I was still
-      at my previous job and only opened it some evenings. <b>It became how I work in late April</b>,
-      once that was no longer the case.</p>
+    <p class="note">Daily output tokens. The first six weeks are faint because I was still at my
+      previous job and only opened it some evenings. In late April that changed, and
+      <b>it became how I work</b>.</p>
     <div class="chart-wrap">
       <div class="chart-h"><canvas id="timeline"></canvas></div>
       <div class="cap">
@@ -146,7 +146,7 @@
   <section>
     <div class="sec-h"><span class="idx">[ 02 ]</span><h2>why this isn't ordinary use</h2></div>
     <p class="note">Most people send a model a question and read the answer. These four numbers
-      describe something else — sustained, delegated, instrumented work.</p>
+      show a different way of working.</p>
     <div class="obs" id="obs"></div>
   </section>
 
@@ -158,15 +158,15 @@
 
   <section>
     <div class="sec-h"><span class="idx">[ 04 ]</span><h2>what the model was asked to do</h2></div>
-    <p class="note">Not "answer," but <b>act</b> — run a shell, edit files, drive a browser, search the
-      web, spawn and supervise other agents. The verb distribution across every session.</p>
+    <p class="note">What I ask for is mostly action: run a shell, <b>edit files</b>, drive a browser,
+      search the web, spawn and supervise other agents. Here is the tool breakdown across every session.</p>
     <div class="chart-wrap"><div class="chart-h"><canvas id="tools"></canvas></div></div>
   </section>
 
   <section>
     <div class="sec-h"><span class="idx">[ 05 ]</span><h2>the right model for the job</h2></div>
-    <p class="note">Three Opus tiers for reasoning, Haiku for cheap high-volume passes. Choosing by
-      capability and cost is a reflex, not a setting. Share of calls:</p>
+    <p class="note">Three Opus tiers for reasoning, Haiku for the cheap high-volume passes. I pick
+      the model to fit the job. Share of calls:</p>
     <div class="chart-wrap"><div class="chart-h sm"><canvas id="models"></canvas></div></div>
   </section>
 
@@ -179,17 +179,17 @@
 
   <section>
     <div class="sec-h"><span class="idx">[ 07 ]</span><h2>when it runs</h2></div>
-    <p class="note">By hour — including the agents that keep working while I'm not at the keyboard.</p>
+    <p class="note">By hour. This counts the agents that keep running while I'm away from the keyboard.</p>
     <div class="chart-wrap"><div class="chart-h sm"><canvas id="hours"></canvas></div></div>
   </section>
 
   <footer>
-    <p class="prov">Every figure above was produced by a short script — <code>build_data.py</code>,
-      in the repository — that streamed <b id="f-tx">—</b> session transcripts and summed their metadata.
-      It reads token counts, tool names, models and timestamps; it never reads the text of a prompt,
-      a file, or a response. Project names are generic. The source is open, so the claim is checkable.</p>
+    <p class="prov">Every figure above comes from a short script in the repository,
+      <code>build_data.py</code>, which reads all <b id="f-tx">505</b> session transcripts and sums their
+      metadata. It counts tokens, tool names, models, and timestamps. It never reads the text of a prompt,
+      a file, or a response. Project names are generic, and the source is public so anyone can check it.</p>
     <p class="fnote">
-      inference value estimated at anthropic public list prices — notional, not subscription spend ·
+      inference value estimated at anthropic list prices, notional rather than actual spend ·
       cache figures from claude code usage metadata ·
       <a href="https://github.com/uhDann/llm-conductor" target="_blank" rel="noopener">source &amp; method →</a>
     </p>
@@ -241,7 +241,7 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
   const figs=[
     {n:fmt(T.total_tokens), c:'tokens read + written, end to end'},
     {n:T.agents_spawned.toLocaleString(), c:'autonomous sub-agents supervised'},
-    {n:Math.round(T.cache_ratio*100)+'<small>%</small>', c:'of input served from cache — sustained, not one-shot'},
+    {n:Math.round(T.cache_ratio*100)+'<small>%</small>', c:'of input tokens read back from cache as sessions build'},
     {n:'≈'+usd(T.est_value_usd), c:'inference directed, at list prices'},
   ];
   document.getElementById('figs').innerHTML = figs.map(f=>
@@ -251,14 +251,14 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
   document.getElementById('f-tx').textContent = T.transcripts;
 
   const obs=[
-    {n:Math.round(T.cache_ratio*100)+'%', h:'I sustain context, not query it',
-     p:'Only ~'+Math.round((1-T.cache_ratio)*100)+'% of input is new text. The rest is the model re-reading large working state across long sessions — the signature of agentic work, not Q&A.'},
+    {n:Math.round(T.cache_ratio*100)+'%', h:'Long, stateful sessions',
+     p:'Only about '+Math.round((1-T.cache_ratio)*100)+'% of the input I send is fresh text. The rest is context the model re-reads as a session builds. Short back-and-forth never produces a ratio like that.'},
     {n:T.agents_spawned.toLocaleString(), h:'Most turns delegate',
-     p:'I run fan-outs of parallel agents that research, draft and verify, then review the synthesis. Supervision, not typing, is the bottleneck.'},
-    {n:T.distinct_tools+' tools', h:'The model has hands',
-     p:fmt(T.web_calls)+' autonomous web lookups, plus shell, file edits and a browser. It changes the world, then checks its work.'},
+     p:'I spin up parallel agents that research, draft, and check each other, then review what comes back. The work is mostly steering.'},
+    {n:T.distinct_tools+' tools', h:'It uses real tools',
+     p:fmt(T.web_calls)+' web lookups it ran on its own, plus a shell, file edits, and a browser. It makes changes, then checks them.'},
     {n:T.distinct_models, h:'Routed by cost',
-     p:'Opus tiers carry the reasoning; Haiku absorbs the cheap high-volume passes. Spend follows difficulty.'},
+     p:'Opus handles the hard reasoning. Haiku takes the cheap, high-volume passes. I pick the model to fit the task.'},
   ];
   document.getElementById('obs').innerHTML = obs.map(o=>
     `<div class="ob"><div class="n">${o.n}</div><h3>${o.h}</h3><p>${o.p}</p></div>`).join('');
@@ -303,7 +303,7 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
       maintainAspectRatio:false}
   });
 
-  // models — horizontal stacked single bar (grayscale)
+  // models: horizontal stacked single bar (grayscale)
   const total=D.models.reduce((s,m)=>s+m.count,0);
   const shades=['#16160f','#54534b','#8f8e84','#bbb9af','#dad8cd'];
   new Chart(document.getElementById('models'),{
@@ -342,7 +342,7 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
   });
 }).catch(e=>{
   document.querySelector('.lede').innerHTML =
-    'Serve this folder over HTTP to load <code>data.json</code> — e.g. <code>python3 -m http.server</code>.';
+    'Serve this folder over HTTP to load <code>data.json</code>, e.g. <code>python3 -m http.server</code>.';
 });
 </script>
 </body>
