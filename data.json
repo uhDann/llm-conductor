@@ -1,19 +1,25 @@
 {
   "totals": {
+    "est_value_usd": 38857,
+    "cost_by_tier": {
+      "opus": 38830.69,
+      "haiku": 26.48
+    },
+    "cache_ratio": 0.9808,
     "transcripts": 505,
     "active_days": 54,
     "first_day": "2026-03-25",
     "last_day": "2026-06-06",
-    "assistant_turns": 63185,
-    "user_turns": 40332,
-    "total_turns": 103517,
+    "assistant_turns": 63239,
+    "user_turns": 40359,
+    "total_turns": 103598,
     "agents_spawned": 959,
     "web_calls": 2294,
-    "input_tokens": 3681893,
-    "output_tokens": 57426740,
-    "cache_read_tokens": 18704703935,
-    "cache_create_tokens": 362574732,
-    "total_tokens": 19128387300,
+    "input_tokens": 3682775,
+    "output_tokens": 57482556,
+    "cache_read_tokens": 18707739628,
+    "cache_create_tokens": 362660560,
+    "total_tokens": 19131565519,
     "distinct_models": 4,
     "distinct_tools": 36
   },
@@ -24,7 +30,7 @@
     },
     {
       "name": "claude-opus-4-8",
-      "count": 6704
+      "count": 6758
     },
     {
       "name": "claude-opus-4-6",
@@ -38,19 +44,19 @@
   "tools": [
     {
       "name": "Bash",
-      "count": 16652
+      "count": 16667
     },
     {
       "name": "Read",
-      "count": 5885
+      "count": 5887
     },
     {
       "name": "Edit",
-      "count": 4603
+      "count": 4607
     },
     {
       "name": "Write",
-      "count": 1581
+      "count": 1583
     },
     {
       "name": "WebSearch",
@@ -70,7 +76,7 @@
     },
     {
       "name": "ToolSearch",
-      "count": 452
+      "count": 453
     },
     {
       "name": "Agent",
@@ -361,16 +367,16 @@
     },
     {
       "date": "2026-06-06",
-      "events": 505,
-      "out_tokens": 367658
+      "events": 591,
+      "out_tokens": 423474
     }
   ],
   "projects": [
     {
       "label": "Orchestration & personal automation",
-      "out_tokens": 25715964,
+      "out_tokens": 25771780,
       "agents": 622,
-      "turns": 19362
+      "turns": 19416
     },
     {
       "label": "Collaborative multi-agent build",
@@ -480,7 +486,7 @@
     },
     {
       "hour": 17,
-      "count": 6593
+      "count": 6679
     },
     {
       "hour": 18,

@@ -25,6 +25,23 @@ PROJECT_LABELS = {
 def label_for(dirname):
     return PROJECT_LABELS.get(dirname, "Background workflows")
 
+# Anthropic list prices, USD per million tokens. Used to estimate the *value*
+# of inference directed (notional, at public API rates — not subscription spend).
+# (input, output, cache_read, cache_write)
+PRICING = {
+    "opus":   (15.0, 75.0, 1.50, 18.75),
+    "sonnet": (3.0,  15.0, 0.30, 3.75),
+    "haiku":  (1.0,  5.0,  0.10, 1.25),
+}
+def price_tier(model):
+    if "haiku" in model:  return "haiku"
+    if "sonnet" in model: return "sonnet"
+    return "opus"
+
+def cost_for(tier, inp, out, cr, cw):
+    i, o, r, w = PRICING[tier]
+    return (inp*i + out*o + cr*r + cw*w) / 1_000_000
+
 def main():
     files = glob.glob(os.path.join(ROOT, "**", "*.jsonl"), recursive=True)
 
@@ -33,6 +50,8 @@ def main():
     models = Counter(); tools = Counter()
     by_day_events = Counter(); by_day_out = Counter(); by_hour = Counter()
     proj_out = Counter(); proj_agents = Counter(); proj_turns = Counter()
+    # per-tier token accumulation for cost estimation
+    tier_tok = {t: {"in":0,"out":0,"cr":0,"cw":0} for t in PRICING}
 
     for fp in files:
         d = os.path.basename(os.path.dirname(fp))
@@ -64,12 +83,17 @@ def main():
                 u = msg.get("usage")
                 if isinstance(u, dict):
                     o_ = u.get("output_tokens", 0)
-                    intok += u.get("input_tokens", 0); outtok += o_
-                    cacheread += u.get("cache_read_input_tokens", 0)
-                    cachecreate += u.get("cache_creation_input_tokens", 0)
+                    i_ = u.get("input_tokens", 0)
+                    cr_ = u.get("cache_read_input_tokens", 0)
+                    cw_ = u.get("cache_creation_input_tokens", 0)
+                    intok += i_; outtok += o_
+                    cacheread += cr_; cachecreate += cw_
                     proj_out[lab] += o_
                     if len(ts) >= 10:
                         by_day_out[ts[:10]] += o_
+                    if m and m != "<synthetic>":
+                        bucket = tier_tok[price_tier(m)]
+                        bucket["in"]+=i_; bucket["out"]+=o_; bucket["cr"]+=cr_; bucket["cw"]+=cw_
                 c = msg.get("content")
                 if isinstance(c, list):
                     for b in c:
@@ -104,8 +128,20 @@ def main():
         for n, c in tools.most_common(14)
     ]
 
+    est_cost = sum(cost_for(t, b["in"], b["out"], b["cr"], b["cw"])
+                   for t, b in tier_tok.items())
+    cost_by_tier = {t: round(cost_for(t, b["in"], b["out"], b["cr"], b["cw"]), 2)
+                    for t, b in tier_tok.items() if b["out"] or b["in"]}
+
+    # Cache efficiency: share of all input-side tokens served from cache.
+    input_side = intok + cacheread + cachecreate
+    cache_ratio = round(cacheread / input_side, 4) if input_side else 0
+
     data = {
         "totals": {
+            "est_value_usd": round(est_cost),
+            "cost_by_tier": cost_by_tier,
+            "cache_ratio": cache_ratio,
             "transcripts": len(files),
             "active_days": len(by_day_events),
             "first_day": days[0] if days else None,
