@@ -1,22 +1,21 @@
-# I don't use LLMs. I conduct them.
+# usage record
 
-A self-referential dashboard built for the **Paradigm Fellowship** question *"Show us how you're making use of LLMs."*
+A plain record of how I actually work with language models, read back from my own Claude Code session logs. Live at **[llms.danilakozlov.com](https://llms.danilakozlov.com)**.
 
-Instead of describing how I use language models, I let an LLM agent answer the question by parsing **my own usage**. It streamed **505 Claude Code session transcripts** spanning 54 active days and aggregated them into the numbers you see live at the site.
-
-**The dashboard about how I use LLMs was built by one.**
+Instead of describing how I use LLMs, I had a script read all 519 of my own session transcripts and sum the metadata. The page is the result.
 
 ## What it shows
 
-- **19.1B tokens** processed and **57.4M** generated end-to-end
-- **959 autonomous sub-agents** spawned (Agent + Task delegations)
-- **103.5K directed turns** across 54 active days
-- Four models chosen by job and economics (Opus 4.6 / 4.7 / 4.8 + Haiku 4.5)
-- Tool-call distribution, daily output, per-project breadth, and hour-of-day rhythm
+- **7.3 tool actions per instruction** I give — I mostly direct the model and it does the rest
+- **108 sub-agents** running in parallel under a single workflow, nested **6 levels** deep
+- **98% of input** read back from cache, the signature of long, stateful sessions rather than one-off prompts
+- **~339K lines** of code edited or written across **1,170 files** (Python, TypeScript, LaTeX, Astro, and more)
+- Each new frontier model adopted within a day or two of release
+- Daily-output timeline, tool-call breakdown, per-project view, and a few of the things this turned into
 
 ## Privacy
 
-`build_data.py` reads **only metadata** — token counts, tool names, models, timestamps, and message *types*. It never reads, stores, or emits the content of any prompt, file, or response. Project directories are mapped to generic labels. Everything published is a pure aggregate. The source is here so you can verify that.
+`build_data.py` reads **only metadata** — token counts, tool names, models, timestamps, and file extensions. It never reads, stores, or emits the content of any prompt, file, or response. Project names are generic. Everything published is an aggregate, and the source is here so it can be checked.
 
 ## Run it yourself
 
@@ -25,4 +24,4 @@ python3 build_data.py        # regenerate data.json from ~/.claude/projects
 python3 -m http.server 8777  # then open http://localhost:8777
 ```
 
-Built by [Danila Kozlov](https://github.com/uhDann) · `index.html` + `data.json`, no build step, no tracking.
+`index.html` + `data.json`, no build step, no tracking. Inference value is estimated at Anthropic public list prices (notional, not subscription spend).

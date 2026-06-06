@@ -42,6 +42,25 @@ def cost_for(tier, inp, out, cr, cw):
     i, o, r, w = PRICING[tier]
     return (inp*i + out*o + cr*r + cw*w) / 1_000_000
 
+# Map file extensions to a human language/format label for the "code shipped" view.
+LANG_EXT = {
+    "py":"Python", "ts":"TypeScript", "tsx":"TypeScript (React)", "js":"JavaScript",
+    "jsx":"JavaScript (React)", "vue":"Vue", "astro":"Astro", "svelte":"Svelte",
+    "html":"HTML", "css":"CSS", "scss":"CSS", "tex":"LaTeX", "md":"Markdown",
+    "sh":"Shell", "bash":"Shell", "zsh":"Shell", "rs":"Rust", "go":"Go",
+    "c":"C", "h":"C/C++", "cc":"C++", "cpp":"C++", "hpp":"C++", "cu":"CUDA",
+    "java":"Java", "rb":"Ruby", "swift":"Swift", "sol":"Solidity",
+    "json":"JSON", "toml":"TOML", "yaml":"YAML", "yml":"YAML", "sql":"SQL",
+    "ipynb":"Jupyter", "txt":"Text",
+}
+def lang_for(path):
+    ext = os.path.splitext(path)[1].lstrip(".").lower()
+    return LANG_EXT.get(ext)
+
+# Human comparison anchors for the headline token figure (clearly notional).
+TOKENS_PER_BOOK = 90_000     # ~300-page book at ~750 tokens/page
+CHARS_PER_LINE  = 40         # rough average for code/markup
+
 def main():
     files = glob.glob(os.path.join(ROOT, "**", "*.jsonl"), recursive=True)
 
@@ -52,6 +71,15 @@ def main():
     proj_out = Counter(); proj_agents = Counter(); proj_turns = Counter()
     # per-tier token accumulation for cost estimation
     tier_tok = {t: {"in":0,"out":0,"cr":0,"cw":0} for t in PRICING}
+
+    # --- new metric accumulators ---
+    total_tool_calls = 0
+    human_prompts = 0                 # genuine user instructions (str content, not sidechain)
+    edit_calls = write_calls = 0
+    code_chars = 0
+    touched_files = set()             # distinct file paths edited/written
+    lang_calls = Counter()            # Edit/Write/Read calls per language
+    model_first = {}                  # model id -> earliest ISO timestamp seen
 
     for fp in files:
         # Attribute by the TOP-LEVEL project dir under ~/.claude/projects, so that
@@ -73,6 +101,12 @@ def main():
                 assistant_turns += 1; proj_turns[lab] += 1
             elif t == "user":
                 user_turns += 1
+                # A genuine human instruction: plain string content, not an
+                # agent-to-agent sidechain message or a tool_result echo.
+                if not o.get("isSidechain"):
+                    uc = o.get("message", {}).get("content") if isinstance(o.get("message"), dict) else None
+                    if isinstance(uc, str) and uc.strip():
+                        human_prompts += 1
             ts = o.get("timestamp", "")
             if len(ts) >= 10:
                 by_day_events[ts[:10]] += 1
@@ -83,6 +117,8 @@ def main():
                 m = msg.get("model")
                 if m and m != "<synthetic>":
                     models[m] += 1
+                    if ts and (m not in model_first or ts < model_first[m]):
+                        model_first[m] = ts
                 u = msg.get("usage")
                 if isinstance(u, dict):
                     o_ = u.get("output_tokens", 0)
@@ -103,10 +139,26 @@ def main():
                         if isinstance(b, dict) and b.get("type") == "tool_use":
                             n = b.get("name", "?")
                             tools[n] += 1
+                            total_tool_calls += 1
                             if n in ("Agent", "TaskCreate"):
                                 agents += 1; proj_agents[lab] += 1
                             if n in ("WebSearch", "WebFetch"):
                                 web_calls += 1
+                            inp = b.get("input") or {}
+                            if isinstance(inp, dict):
+                                if n == "Edit":
+                                    edit_calls += 1
+                                    code_chars += len(inp.get("new_string") or "")
+                                elif n == "Write":
+                                    write_calls += 1
+                                    code_chars += len(inp.get("content") or "")
+                                fpth = inp.get("file_path")
+                                if fpth and n in ("Edit", "Write", "Read"):
+                                    if n in ("Edit", "Write"):
+                                        touched_files.add(fpth)
+                                    lg = lang_for(fpth)
+                                    if lg:
+                                        lang_calls[lg] += 1
 
     days = sorted(by_day_events)
     timeline = [
@@ -140,6 +192,33 @@ def main():
     input_side = intok + cacheread + cachecreate
     cache_ratio = round(cacheread / input_side, 4) if input_side else 0
 
+    # Parallel-agent fan-out and nesting depth, from the on-disk transcript tree.
+    # A workflow dir (wf_*) or a session's subagents/ tree holds one file per agent.
+    wf_counts = Counter(); session_counts = Counter(); max_depth = 0
+    for fp in files:
+        parts = os.path.relpath(fp, ROOT).split(os.sep)
+        max_depth = max(max_depth, len(parts))
+        for i, p in enumerate(parts):
+            if p.startswith("wf_"):
+                wf_counts[os.sep.join(parts[:i + 1])] += 1
+        if "subagents" in parts:
+            si = parts.index("subagents")
+            session_counts[os.sep.join(parts[:si])] += 1
+    peak_fanout = max(wf_counts.values()) if wf_counts else 0
+    peak_session_agents = max(session_counts.values()) if session_counts else 0
+
+    # Leverage: autonomous actions per genuine human instruction.
+    leverage = round(total_tool_calls / human_prompts, 1) if human_prompts else 0
+    code_lines = round(code_chars / CHARS_PER_LINE)
+    books = round((intok + outtok + cacheread + cachecreate) / TOKENS_PER_BOOK)
+
+    languages = [{"name": n, "count": c} for n, c in lang_calls.most_common(10)]
+    model_timeline = sorted(
+        ({"name": m.replace("claude-", "").replace("-20251001", ""), "first": ts[:10]}
+         for m, ts in model_first.items()),
+        key=lambda x: x["first"],
+    )
+
     data = {
         "totals": {
             "est_value_usd": round(est_cost),
@@ -161,11 +240,26 @@ def main():
             "total_tokens": intok + outtok + cacheread + cachecreate,
             "distinct_models": len(models),
             "distinct_tools": len(tools),
+            # --- new headline metrics ---
+            "total_tool_calls": total_tool_calls,
+            "human_prompts": human_prompts,
+            "leverage": leverage,            # tool actions per human instruction
+            "peak_fanout": peak_fanout,      # most agents under one workflow
+            "peak_session_agents": peak_session_agents,
+            "max_depth": max_depth,          # deepest agent-spawning-agent nesting
+            "edit_calls": edit_calls,
+            "write_calls": write_calls,
+            "code_edits": edit_calls + write_calls,
+            "code_lines": code_lines,
+            "files_touched": len(touched_files),
+            "books_equiv": books,
         },
         "models": [{"name": m, "count": c} for m, c in models.most_common()],
         "tools": top_tools,
         "timeline": timeline,
         "projects": projects,
+        "languages": languages,
+        "model_timeline": model_timeline,
         "hours": [{"hour": h, "count": by_hour.get(h, 0)} for h in range(24)],
     }
     out_path = os.path.join(os.path.dirname(__file__), "data.json")

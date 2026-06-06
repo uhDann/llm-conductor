@@ -1,27 +1,39 @@
 {
   "totals": {
-    "est_value_usd": 38903,
+    "est_value_usd": 39029,
     "cost_by_tier": {
-      "opus": 38876.14,
-      "haiku": 26.48
+      "opus": 39002.05,
+      "haiku": 27.14
     },
     "cache_ratio": 0.9807,
-    "transcripts": 505,
+    "transcripts": 519,
     "active_days": 54,
     "first_day": "2026-03-25",
     "last_day": "2026-06-06",
-    "assistant_turns": 63302,
-    "user_turns": 40392,
-    "total_turns": 103694,
-    "agents_spawned": 959,
-    "web_calls": 2296,
-    "input_tokens": 3683933,
-    "output_tokens": 57623063,
-    "cache_read_tokens": 18713671308,
-    "cache_create_tokens": 364047137,
-    "total_tokens": 19139025441,
+    "assistant_turns": 63686,
+    "user_turns": 40677,
+    "total_turns": 104363,
+    "agents_spawned": 972,
+    "web_calls": 2405,
+    "input_tokens": 3824044,
+    "output_tokens": 58050056,
+    "cache_read_tokens": 18759641763,
+    "cache_create_tokens": 365792006,
+    "total_tokens": 19187307869,
     "distinct_models": 4,
-    "distinct_tools": 36
+    "distinct_tools": 36,
+    "total_tool_calls": 34766,
+    "human_prompts": 4752,
+    "leverage": 7.3,
+    "peak_fanout": 108,
+    "peak_session_agents": 207,
+    "max_depth": 6,
+    "edit_calls": 4635,
+    "write_calls": 1587,
+    "code_edits": 6222,
+    "code_lines": 338887,
+    "files_touched": 1170,
+    "books_equiv": 213192
   },
   "models": [
     {
@@ -30,7 +42,7 @@
     },
     {
       "name": "claude-opus-4-8",
-      "count": 6821
+      "count": 7134
     },
     {
       "name": "claude-opus-4-6",
@@ -38,29 +50,29 @@
     },
     {
       "name": "claude-haiku-4-5-20251001",
-      "count": 2703
+      "count": 2772
     }
   ],
   "tools": [
     {
       "name": "Bash",
-      "count": 16681
+      "count": 16735
     },
     {
       "name": "Read",
-      "count": 5893
+      "count": 5920
     },
     {
       "name": "Edit",
-      "count": 4611
+      "count": 4635
     },
     {
       "name": "Write",
-      "count": 1586
+      "count": 1587
     },
     {
       "name": "WebSearch",
-      "count": 1375
+      "count": 1440
     },
     {
       "name": "TaskUpdate",
@@ -68,7 +80,7 @@
     },
     {
       "name": "WebFetch",
-      "count": 921
+      "count": 965
     },
     {
       "name": "TaskCreate",
@@ -76,11 +88,11 @@
     },
     {
       "name": "ToolSearch",
-      "count": 454
+      "count": 464
     },
     {
       "name": "Agent",
-      "count": 338
+      "count": 351
     },
     {
       "name": "StructuredOutput",
@@ -88,7 +100,7 @@
     },
     {
       "name": "ScheduleWakeup",
-      "count": 150
+      "count": 151
     },
     {
       "name": "Glob",
@@ -367,16 +379,16 @@
     },
     {
       "date": "2026-06-06",
-      "events": 695,
-      "out_tokens": 563981
+      "events": 1433,
+      "out_tokens": 990974
     }
   ],
   "projects": [
     {
       "label": "Orchestration & personal automation",
-      "out_tokens": 29225150,
-      "agents": 622,
-      "turns": 33415
+      "out_tokens": 29489366,
+      "agents": 627,
+      "turns": 33609
     },
     {
       "label": "Collaborative multi-agent build",
@@ -386,9 +398,9 @@
     },
     {
       "label": "Agentic dev sandbox",
-      "out_tokens": 8472832,
-      "agents": 59,
-      "turns": 9081
+      "out_tokens": 8635609,
+      "agents": 67,
+      "turns": 9271
     },
     {
       "label": "Financial knowledge-graph engine",
@@ -407,6 +419,66 @@
       "out_tokens": 73376,
       "agents": 0,
       "turns": 110
+    }
+  ],
+  "languages": [
+    {
+      "name": "Python",
+      "count": 5054
+    },
+    {
+      "name": "TypeScript (React)",
+      "count": 1453
+    },
+    {
+      "name": "LaTeX",
+      "count": 800
+    },
+    {
+      "name": "Astro",
+      "count": 742
+    },
+    {
+      "name": "Markdown",
+      "count": 711
+    },
+    {
+      "name": "TypeScript",
+      "count": 503
+    },
+    {
+      "name": "Shell",
+      "count": 378
+    },
+    {
+      "name": "CSS",
+      "count": 345
+    },
+    {
+      "name": "HTML",
+      "count": 213
+    },
+    {
+      "name": "JSON",
+      "count": 66
+    }
+  ],
+  "model_timeline": [
+    {
+      "name": "haiku-4-5",
+      "first": "2026-03-25"
+    },
+    {
+      "name": "opus-4-6",
+      "first": "2026-03-25"
+    },
+    {
+      "name": "opus-4-7",
+      "first": "2026-04-23"
+    },
+    {
+      "name": "opus-4-8",
+      "first": "2026-05-29"
     }
   ],
   "hours": [
@@ -480,11 +552,11 @@
     },
     {
       "hour": 17,
-      "count": 6783
+      "count": 6794
     },
     {
       "hour": 18,
-      "count": 2822
+      "count": 3549
     },
     {
       "hour": 19,
