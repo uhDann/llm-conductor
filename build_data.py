@@ -54,8 +54,11 @@ def main():
     tier_tok = {t: {"in":0,"out":0,"cr":0,"cw":0} for t in PRICING}
 
     for fp in files:
-        d = os.path.basename(os.path.dirname(fp))
-        lab = label_for(d)
+        # Attribute by the TOP-LEVEL project dir under ~/.claude/projects, so that
+        # nested sub-agent / workflow transcripts (…/<session>/subagents/wf_*/agent-*.jsonl)
+        # roll up to the project they belong to rather than a generic bucket.
+        top = os.path.relpath(fp, ROOT).split(os.sep)[0]
+        lab = label_for(top)
         try:
             fh = open(fp, errors="ignore")
         except Exception:

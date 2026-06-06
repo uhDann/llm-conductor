@@ -1,25 +1,25 @@
 {
   "totals": {
-    "est_value_usd": 38857,
+    "est_value_usd": 38903,
     "cost_by_tier": {
-      "opus": 38830.69,
+      "opus": 38876.14,
       "haiku": 26.48
     },
-    "cache_ratio": 0.9808,
+    "cache_ratio": 0.9807,
     "transcripts": 505,
     "active_days": 54,
     "first_day": "2026-03-25",
     "last_day": "2026-06-06",
-    "assistant_turns": 63239,
-    "user_turns": 40359,
-    "total_turns": 103598,
+    "assistant_turns": 63302,
+    "user_turns": 40392,
+    "total_turns": 103694,
     "agents_spawned": 959,
-    "web_calls": 2294,
-    "input_tokens": 3682775,
-    "output_tokens": 57482556,
-    "cache_read_tokens": 18707739628,
-    "cache_create_tokens": 362660560,
-    "total_tokens": 19131565519,
+    "web_calls": 2296,
+    "input_tokens": 3683933,
+    "output_tokens": 57623063,
+    "cache_read_tokens": 18713671308,
+    "cache_create_tokens": 364047137,
+    "total_tokens": 19139025441,
     "distinct_models": 4,
     "distinct_tools": 36
   },
@@ -30,7 +30,7 @@
     },
     {
       "name": "claude-opus-4-8",
-      "count": 6758
+      "count": 6821
     },
     {
       "name": "claude-opus-4-6",
@@ -44,19 +44,19 @@
   "tools": [
     {
       "name": "Bash",
-      "count": 16667
+      "count": 16681
     },
     {
       "name": "Read",
-      "count": 5887
+      "count": 5893
     },
     {
       "name": "Edit",
-      "count": 4607
+      "count": 4611
     },
     {
       "name": "Write",
-      "count": 1583
+      "count": 1586
     },
     {
       "name": "WebSearch",
@@ -68,7 +68,7 @@
     },
     {
       "name": "WebFetch",
-      "count": 919
+      "count": 921
     },
     {
       "name": "TaskCreate",
@@ -76,7 +76,7 @@
     },
     {
       "name": "ToolSearch",
-      "count": 453
+      "count": 454
     },
     {
       "name": "Agent",
@@ -367,46 +367,40 @@
     },
     {
       "date": "2026-06-06",
-      "events": 591,
-      "out_tokens": 423474
+      "events": 695,
+      "out_tokens": 563981
     }
   ],
   "projects": [
     {
       "label": "Orchestration & personal automation",
-      "out_tokens": 25771780,
+      "out_tokens": 29225150,
       "agents": 622,
-      "turns": 19416
+      "turns": 33415
     },
     {
       "label": "Collaborative multi-agent build",
-      "out_tokens": 17019742,
+      "out_tokens": 17260318,
       "agents": 247,
-      "turns": 16407
+      "turns": 17328
     },
     {
       "label": "Agentic dev sandbox",
-      "out_tokens": 7768327,
+      "out_tokens": 8472832,
       "agents": 59,
-      "turns": 4595
-    },
-    {
-      "label": "Background workflows",
-      "out_tokens": 4513714,
-      "agents": 7,
-      "turns": 20546
+      "turns": 9081
     },
     {
       "label": "Financial knowledge-graph engine",
-      "out_tokens": 1425323,
+      "out_tokens": 1437660,
       "agents": 6,
-      "turns": 174
+      "turns": 259
     },
     {
       "label": "Robotics perception (SLAM)",
-      "out_tokens": 910294,
-      "agents": 18,
-      "turns": 1991
+      "out_tokens": 1153727,
+      "agents": 25,
+      "turns": 3109
     },
     {
       "label": "Spatial-AI experiment",
@@ -486,7 +480,7 @@
     },
     {
       "hour": 17,
-      "count": 6679
+      "count": 6783
     },
     {
       "hour": 18,
