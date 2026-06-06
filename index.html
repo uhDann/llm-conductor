@@ -3,106 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Usage record — working with language models</title>
+<title>usage record — danila kozlov</title>
 <meta name="description" content="A plain record, read back from my own session logs: how the work actually got done with a model in the loop.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root{
-    --bg:#0b0b0c; --panel:#101012; --line:#1c1c1f; --line2:#26262a;
-    --ink:#ececed; --muted:#8c8c93; --dim:#5b5b62; --faint:#39393f;
-    --accent:#c9a86a;            /* one muted, warm accent — used sparingly */
-    --accent-dim:#c9a86a44;
-    --serif:'Instrument Serif',Iowan Old Style,Georgia,serif;
-    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,system-ui,sans-serif;
+    --bg:#f6f5f1; --ink:#16160f; --muted:#6b6a61; --dim:#9a9890; --faint:#cfcdc2;
+    --line:#e2e0d6; --rule:#16160f;
+    --era-past:#cdcbc0; --era-now:#16160f;
+    --sans:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
     --mono:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;line-height:1.6;font-size:16px;letter-spacing:.005em}
-  .wrap{max-width:920px;margin:0 auto;padding:0 28px}
-  ::selection{background:var(--accent-dim)}
-
+    -webkit-font-smoothing:antialiased;line-height:1.55;font-size:16px}
+  .wrap{max-width:940px;margin:0 auto;padding:0 32px}
+  ::selection{background:#16160f;color:var(--bg)}
   .mono{font-family:var(--mono)}
-  .overline{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--dim)}
-  .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);
-    margin-right:8px;vertical-align:middle;box-shadow:0 0 8px var(--accent-dim)}
+
+  /* top bar — echoes the site nav */
+  .topbar{display:flex;justify-content:space-between;align-items:center;
+    padding:26px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em}
+  .topbar .name{font-weight:500;text-transform:uppercase;letter-spacing:.18em}
+  .topbar .nav{color:var(--muted)}
+  .topbar .nav a{color:var(--muted);text-decoration:none;margin-left:18px}
+  .topbar .nav a:hover{color:var(--ink)}
+
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted)}
+  .dot{display:inline-block;width:5px;height:5px;background:var(--ink);border-radius:50%;
+    margin-right:9px;vertical-align:middle}
 
   /* hero */
-  header{padding:110px 0 56px}
-  h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,6.4vw,68px);line-height:1.04;
-    letter-spacing:-.01em;margin:22px 0 0;color:#f6f6f4}
-  h1 em{font-style:italic;color:var(--accent)}
-  .lede{color:var(--muted);font-size:clamp(16px,2vw,18px);max-width:600px;margin:24px 0 0}
+  header{padding:60px 0 50px}
+  h1{font-weight:500;font-size:clamp(34px,5.6vw,60px);line-height:1.05;letter-spacing:-.02em;
+    margin:22px 0 0;max-width:14ch}
+  .lede{color:var(--muted);font-size:clamp(15px,1.9vw,18px);max-width:560px;margin:24px 0 0;line-height:1.6}
   .lede b{color:var(--ink);font-weight:500}
 
+  /* dashed rule */
+  .drule{border:0;border-top:1px dashed var(--faint);margin:0}
+
   /* hero figures */
-  .figs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:64px 0 0;
-    border-top:1px solid var(--line)}
-  .fig{padding:26px 22px 22px 0;border-right:1px solid var(--line)}
-  .fig:last-child{border-right:none;padding-right:0}
-  .fig .n{font-family:var(--mono);font-size:clamp(24px,3.4vw,34px);font-weight:500;
-    letter-spacing:-.02em;color:#f6f6f4}
-  .fig .n small{font-size:.5em;color:var(--muted);font-weight:400;margin-left:2px}
-  .fig .c{color:var(--muted);font-size:12.5px;margin-top:9px;line-height:1.4}
-  .windowline{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:22px}
+  .figs{display:grid;grid-template-columns:repeat(4,1fr);margin:54px 0 0;
+    border-top:1px solid var(--rule)}
+  .fig{padding:24px 22px 0 0}
+  .fig .n{font-family:var(--mono);font-size:clamp(23px,3.2vw,32px);font-weight:500;letter-spacing:-.02em}
+  .fig .n small{font-size:.5em;color:var(--muted);margin-left:1px}
+  .fig .c{color:var(--muted);font-size:12px;margin-top:10px;line-height:1.45;font-family:var(--mono)}
+  .windowline{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:26px;letter-spacing:.02em}
 
   /* sections */
-  section{padding:54px 0;border-top:1px solid var(--line)}
-  .sec-h{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
-  .sec-h .idx{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em}
-  h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.6vw,34px);
-    letter-spacing:-.01em;margin:0;color:#f4f4f2}
-  .note{color:var(--muted);max-width:620px;margin:14px 0 0}
+  section{padding:52px 0;border-top:1px dashed var(--faint)}
+  .sec-h{display:flex;align-items:baseline;gap:18px;margin-bottom:6px}
+  .sec-h .idx{font-family:var(--mono);font-size:12px;color:var(--ink);letter-spacing:.05em}
+  h2{font-weight:500;font-size:clamp(23px,3.2vw,30px);letter-spacing:-.015em;margin:0;text-transform:lowercase}
+  .note{color:var(--muted);max-width:600px;margin:14px 0 0;line-height:1.6}
   .note b{color:var(--ink);font-weight:500}
 
   .chart-wrap{margin-top:30px}
   .chart-h{position:relative;height:300px}
   .chart-h.sm{height:230px}
-  .cap{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:16px;line-height:1.6}
-  .cap .sw{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:middle;margin:0 5px 0 0}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:16px;line-height:1.7;letter-spacing:.02em}
+  .cap .sw{display:inline-block;width:9px;height:9px;vertical-align:middle;margin:0 5px 0 0}
 
-  /* observations / why advanced */
-  .obs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
-    border:1px solid var(--line);margin-top:32px}
-  .ob{background:var(--bg);padding:28px 26px}
-  .ob .n{font-family:var(--mono);font-size:30px;font-weight:500;color:var(--accent);letter-spacing:-.02em}
-  .ob h3{font-size:15px;font-weight:600;margin:14px 0 6px;color:var(--ink);letter-spacing:.01em}
-  .ob p{color:var(--muted);font-size:14px;margin:0;line-height:1.6}
+  /* observations */
+  .obs{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--rule);
+    border-left:1px solid var(--line);margin-top:34px}
+  .ob{padding:26px 26px 28px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .ob .n{font-family:var(--mono);font-size:27px;font-weight:500;letter-spacing:-.02em}
+  .ob h3{font-size:14.5px;font-weight:600;margin:14px 0 7px;letter-spacing:.005em}
+  .ob p{color:var(--muted);font-size:13.5px;margin:0;line-height:1.62}
 
-  /* plain stats grid */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
-    border:1px solid var(--line);margin-top:30px}
-  .st{background:var(--bg);padding:20px 22px}
-  .st .v{font-family:var(--mono);font-size:22px;color:#f2f2f0;letter-spacing:-.01em}
-  .st .l{color:var(--dim);font-size:12px;margin-top:6px}
+  /* plain stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);
+    border-left:1px solid var(--line);margin-top:30px}
+  .st{padding:20px 22px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .st .v{font-family:var(--mono);font-size:21px;letter-spacing:-.01em}
+  .st .l{color:var(--dim);font-size:11.5px;margin-top:7px;font-family:var(--mono);letter-spacing:.02em}
 
   /* projects */
-  .proj{margin-top:30px;display:flex;flex-direction:column}
-  .prow{padding:15px 0;border-top:1px solid var(--line);display:grid;
-    grid-template-columns:1fr 90px;gap:16px;align-items:center}
+  .proj{margin-top:30px}
+  .prow{padding:16px 0;border-top:1px solid var(--line);display:grid;
+    grid-template-columns:1fr auto;gap:16px;align-items:baseline}
   .prow:last-child{border-bottom:1px solid var(--line)}
-  .prow .nm{font-size:14.5px;color:var(--ink)}
-  .prow .meta{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px}
-  .prow .barwrap{grid-column:1 / -1;height:3px;background:var(--line);margin-top:0;border-radius:2px;overflow:hidden}
-  .prow .barwrap > i{display:block;height:100%;background:var(--accent);opacity:.85}
-  .prow .amt{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right}
+  .prow .nm{font-size:15px;font-weight:500}
+  .prow .meta{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:5px;letter-spacing:.02em}
+  .prow .amt{font-family:var(--mono);font-size:13.5px;color:var(--muted)}
+  .prow .barwrap{grid-column:1 / -1;height:2px;background:var(--line);margin-top:2px}
+  .prow .barwrap > i{display:block;height:100%;background:var(--ink)}
 
-  footer{padding:56px 0 90px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
+  footer{padding:54px 0 90px;border-top:1px solid var(--rule);color:var(--dim);font-size:13px}
   footer .prov{color:var(--muted);max-width:640px;line-height:1.7}
-  footer a{color:var(--accent);text-decoration:none}
-  footer a:hover{text-decoration:underline}
-  footer code{font-family:var(--mono);font-size:12px;color:var(--muted)}
-  .fnote{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:18px;line-height:1.7}
+  footer .prov b{color:var(--ink);font-weight:500}
+  footer code{font-family:var(--mono);font-size:12.5px;background:#16160f0d;padding:1px 6px;border-radius:3px}
+  footer a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  .fnote{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:20px;line-height:1.8;letter-spacing:.02em}
 
   @media(max-width:760px){
-    .figs{grid-template-columns:repeat(2,1fr)}
-    .fig{border-right:none;border-bottom:1px solid var(--line);padding-right:22px}
-    .fig:nth-child(odd){border-right:1px solid var(--line)}
+    .figs{grid-template-columns:repeat(2,1fr);gap:0}
+    .fig{padding-right:18px}
     .obs,.stats{grid-template-columns:1fr}
   }
 </style>
@@ -110,66 +114,71 @@
 <body>
 <div class="wrap">
 
+  <div class="topbar">
+    <span class="name">Danila Kozlov</span>
+    <span class="nav"><a href="https://www.danilakozlov.com" target="_blank" rel="noopener">work</a><a href="https://www.spatialkittens.com" target="_blank" rel="noopener">spatial kittens</a><a href="https://github.com/uhDann" target="_blank" rel="noopener">github</a></span>
+  </div>
+
   <header>
-    <div class="overline"><span class="dot"></span>claude code · personal usage record</div>
-    <h1>A plain record of<br>how the work<br>actually <em>got done</em>.</h1>
-    <p class="lede">Read back from my own session logs over two and a half months — token
-      counts and tool calls only, <b>no content of any kind</b>. Not a pitch; a measurement.</p>
+    <div class="tag"><span class="dot"></span>claude code · personal usage record</div>
+    <h1>a plain record of how the work actually got done.</h1>
+    <p class="lede">Read back from my own session logs over two and a half months — token counts
+      and tool calls only, <b>no content of any kind</b>. Not a pitch; a measurement.</p>
 
     <div class="figs" id="figs"></div>
     <div class="windowline" id="windowline">—</div>
   </header>
 
   <section>
-    <div class="sec-h"><span class="idx">01</span><h2>The shape of it</h2></div>
+    <div class="sec-h"><span class="idx">[ 01 ]</span><h2>the shape of it</h2></div>
     <p class="note">Daily output tokens. The first six weeks are faint for a reason — I was still
       at my previous job and only opened it some evenings. <b>It became how I work in late April</b>,
       once that was no longer the case.</p>
     <div class="chart-wrap">
       <div class="chart-h"><canvas id="timeline"></canvas></div>
       <div class="cap">
-        <span class="sw" style="background:var(--faint)"></span>Mar–Apr · occasional, alongside a full-time job
-        &nbsp;&nbsp;<span class="sw" style="background:var(--accent)"></span>late Apr onward · the default way I build
+        <span class="sw" style="background:var(--era-past)"></span>mar–apr · occasional, alongside a full-time job
+        &nbsp;&nbsp;<span class="sw" style="background:var(--era-now)"></span>late apr onward · the default way i build
       </div>
     </div>
   </section>
 
   <section>
-    <div class="sec-h"><span class="idx">02</span><h2>Why this isn't ordinary use</h2></div>
+    <div class="sec-h"><span class="idx">[ 02 ]</span><h2>why this isn't ordinary use</h2></div>
     <p class="note">Most people send a model a question and read the answer. These four numbers
       describe something else — sustained, delegated, instrumented work.</p>
     <div class="obs" id="obs"></div>
   </section>
 
   <section>
-    <div class="sec-h"><span class="idx">03</span><h2>The basics</h2></div>
+    <div class="sec-h"><span class="idx">[ 03 ]</span><h2>the basics</h2></div>
     <p class="note">The plain totals, for the record.</p>
     <div class="stats" id="stats"></div>
   </section>
 
   <section>
-    <div class="sec-h"><span class="idx">04</span><h2>What the model was asked to do</h2></div>
+    <div class="sec-h"><span class="idx">[ 04 ]</span><h2>what the model was asked to do</h2></div>
     <p class="note">Not "answer," but <b>act</b> — run a shell, edit files, drive a browser, search the
       web, spawn and supervise other agents. The verb distribution across every session.</p>
     <div class="chart-wrap"><div class="chart-h"><canvas id="tools"></canvas></div></div>
   </section>
 
   <section>
-    <div class="sec-h"><span class="idx">05</span><h2>The right model for the job</h2></div>
+    <div class="sec-h"><span class="idx">[ 05 ]</span><h2>the right model for the job</h2></div>
     <p class="note">Three Opus tiers for reasoning, Haiku for cheap high-volume passes. Choosing by
       capability and cost is a reflex, not a setting. Share of calls:</p>
     <div class="chart-wrap"><div class="chart-h sm"><canvas id="models"></canvas></div></div>
   </section>
 
   <section>
-    <div class="sec-h"><span class="idx">06</span><h2>Across the work</h2></div>
+    <div class="sec-h"><span class="idx">[ 06 ]</span><h2>across the work</h2></div>
     <p class="note">The same way of working spans CAD generation, financial knowledge graphs, robotics
       perception, research systems. Names withheld; sized by output.</p>
     <div class="proj" id="projects"></div>
   </section>
 
   <section>
-    <div class="sec-h"><span class="idx">07</span><h2>When it runs</h2></div>
+    <div class="sec-h"><span class="idx">[ 07 ]</span><h2>when it runs</h2></div>
     <p class="note">By hour — including the agents that keep working while I'm not at the keyboard.</p>
     <div class="chart-wrap"><div class="chart-h sm"><canvas id="hours"></canvas></div></div>
   </section>
@@ -180,8 +189,8 @@
       It reads token counts, tool names, models and timestamps; it never reads the text of a prompt,
       a file, or a response. Project names are generic. The source is open, so the claim is checkable.</p>
     <p class="fnote">
-      inference value estimated at Anthropic public list prices — notional, not subscription spend ·
-      cache figures from Claude Code usage metadata ·
+      inference value estimated at anthropic public list prices — notional, not subscription spend ·
+      cache figures from claude code usage metadata ·
       <a href="https://github.com/uhDann/llm-conductor" target="_blank" rel="noopener">source &amp; method →</a>
     </p>
   </footer>
@@ -197,30 +206,31 @@ const fmt = n => {
 };
 const usd = n => '$'+Math.round(n/1000)+'K';
 const mday = d => new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
-const INK='#ececed', MUT='#8c8c93', DIM='#5b5b62', FAINT='#39393f', ACC='#c9a86a', LINE='#1c1c1f';
+const INK='#16160f', MUT='#6b6a61', DIM='#9a9890', PAST='#cdcbc0', NOW='#16160f', LINE='#e2e0d6', BG='#f6f5f1';
 
 Chart.defaults.color = DIM;
 Chart.defaults.font.family = "'JetBrains Mono','SF Mono',monospace";
 Chart.defaults.font.size = 10;
-const axis = {grid:{display:false},border:{color:LINE},ticks:{color:DIM}};
+const axis = {grid:{display:false},border:{color:INK},ticks:{color:DIM}};
+const tip = {backgroundColor:'#fffefb',borderColor:INK,borderWidth:1,padding:10,
+  titleColor:INK,bodyColor:MUT,displayColors:false,cornerRadius:0};
 
 // shade + label the "previous job" era on the timeline
 const eraPlugin = {
   id:'era',
-  beforeDraw(chart){
+  afterDraw(chart){
     const {ctx,chartArea:a,scales:{x}} = chart;
-    const splitISO='2026-04-29';
     const labels=chart.data._iso||[];
-    let idx=labels.findIndex(d=>d>=splitISO); if(idx<0) idx=labels.length;
+    let idx=labels.findIndex(d=>d>='2026-04-29'); if(idx<0) idx=labels.length;
     const xPos = idx<labels.length ? x.getPixelForValue(idx) - (x.getPixelForValue(1)-x.getPixelForValue(0))/2 : a.right;
     ctx.save();
-    ctx.fillStyle='rgba(255,255,255,0.015)';
+    ctx.fillStyle='rgba(22,22,15,0.025)';
     ctx.fillRect(a.left,a.top,xPos-a.left,a.bottom-a.top);
-    ctx.strokeStyle=FAINT; ctx.setLineDash([3,4]); ctx.lineWidth=1;
+    ctx.strokeStyle=INK; ctx.setLineDash([2,3]); ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(xPos,a.top); ctx.lineTo(xPos,a.bottom); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle=DIM; ctx.font="10px 'JetBrains Mono',monospace";
-    ctx.fillText('left previous job', xPos+8, a.top+13);
+    ctx.fillStyle=MUT; ctx.font="10px 'JetBrains Mono',monospace";
+    ctx.fillText('← left previous job', xPos+7, a.top+12);
     ctx.restore();
   }
 };
@@ -228,12 +238,11 @@ const eraPlugin = {
 fetch('./data.json').then(r=>r.json()).then(D=>{
   const T=D.totals;
 
-  // hero figures
   const figs=[
-    {n:fmt(T.total_tokens), c:'tokens read and written, end to end'},
-    {n:T.agents_spawned.toLocaleString(), c:'autonomous sub-agents delegated and supervised'},
+    {n:fmt(T.total_tokens), c:'tokens read + written, end to end'},
+    {n:T.agents_spawned.toLocaleString(), c:'autonomous sub-agents supervised'},
     {n:Math.round(T.cache_ratio*100)+'<small>%</small>', c:'of input served from cache — sustained, not one-shot'},
-    {n:'≈'+usd(T.est_value_usd), c:'inference directed, at public list prices'},
+    {n:'≈'+usd(T.est_value_usd), c:'inference directed, at list prices'},
   ];
   document.getElementById('figs').innerHTML = figs.map(f=>
     `<div class="fig"><div class="n">${f.n}</div><div class="c">${f.c}</div></div>`).join('');
@@ -241,7 +250,6 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
     `${mday(T.first_day)} – ${mday(T.last_day)} 2026   ·   ${T.active_days} active days   ·   ${T.transcripts} sessions`;
   document.getElementById('f-tx').textContent = T.transcripts;
 
-  // observations
   const obs=[
     {n:Math.round(T.cache_ratio*100)+'%', h:'I sustain context, not query it',
      p:'Only ~'+Math.round((1-T.cache_ratio)*100)+'% of input is new text. The rest is the model re-reading large working state across long sessions — the signature of agentic work, not Q&A.'},
@@ -255,7 +263,6 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
   document.getElementById('obs').innerHTML = obs.map(o=>
     `<div class="ob"><div class="n">${o.n}</div><h3>${o.h}</h3><p>${o.p}</p></div>`).join('');
 
-  // basic stats
   const stats=[
     {v:T.total_turns.toLocaleString(), l:'total exchanges'},
     {v:fmt(T.output_tokens), l:'output tokens generated'},
@@ -269,17 +276,14 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
 
   // timeline
   const iso=D.timeline.map(d=>d.date);
-  const cTL=document.getElementById('timeline');
-  const tl=new Chart(cTL,{
+  new Chart(document.getElementById('timeline'),{
     type:'bar',
     data:{labels:D.timeline.map(d=>mday(d.date)), _iso:iso,
       datasets:[{data:D.timeline.map(d=>d.out_tokens),
-        backgroundColor:D.timeline.map(d=>d.date>='2026-04-29'?ACC:FAINT),
-        borderRadius:1.5,borderSkipped:false,barPercentage:.92,categoryPercentage:.96}]},
+        backgroundColor:D.timeline.map(d=>d.date>='2026-04-29'?NOW:PAST),
+        borderRadius:0,borderSkipped:false,barPercentage:.9,categoryPercentage:.96}]},
     options:{plugins:{legend:{display:false},
-      tooltip:{backgroundColor:'#161618',borderColor:LINE,borderWidth:1,padding:10,
-        titleColor:INK,bodyColor:MUT,displayColors:false,
-        callbacks:{label:c=>fmt(c.raw)+' output tokens'}}},
+      tooltip:{...tip,callbacks:{label:c=>fmt(c.raw)+' output tokens'}}},
       scales:{x:{...axis,ticks:{color:DIM,maxTicksLimit:8,maxRotation:0}},
         y:{...axis,ticks:{color:DIM,callback:fmt,maxTicksLimit:5}}},
       maintainAspectRatio:false},
@@ -291,32 +295,27 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
     type:'bar',
     data:{labels:D.tools.map(t=>t.name),
       datasets:[{data:D.tools.map(t=>t.count),
-        backgroundColor:(c)=>c.dataIndex===0?ACC:'#3a3a40',
-        hoverBackgroundColor:ACC,borderRadius:2}]},
+        backgroundColor:(c)=>c.dataIndex===0?INK:'#b9b7ac',hoverBackgroundColor:INK,borderRadius:0}]},
     options:{indexAxis:'y',plugins:{legend:{display:false},
-      tooltip:{backgroundColor:'#161618',borderColor:LINE,borderWidth:1,padding:10,
-        titleColor:INK,bodyColor:MUT,displayColors:false,
-        callbacks:{label:c=>c.raw.toLocaleString()+' calls'}}},
+      tooltip:{...tip,callbacks:{label:c=>c.raw.toLocaleString()+' calls'}}},
       scales:{x:{...axis,ticks:{color:DIM,callback:fmt}},
-        y:{grid:{display:false},border:{color:LINE},ticks:{color:MUT}}},
+        y:{grid:{display:false},border:{color:INK},ticks:{color:MUT}}},
       maintainAspectRatio:false}
   });
 
-  // models — horizontal stacked single bar
+  // models — horizontal stacked single bar (grayscale)
   const total=D.models.reduce((s,m)=>s+m.count,0);
-  const shades=[ACC,'#8a7a4e','#55555c','#3a3a40','#2a2a2e'];
+  const shades=['#16160f','#54534b','#8f8e84','#bbb9af','#dad8cd'];
   new Chart(document.getElementById('models'),{
     type:'bar',
     data:{labels:[''],
       datasets:D.models.map((m,i)=>({label:m.name.replace('claude-','').replace('-20251001',''),
         data:[m.count],backgroundColor:shades[i%shades.length],
-        borderColor:'#0b0b0c',borderWidth:1.5,barPercentage:.55}))},
+        borderColor:BG,borderWidth:1.5,barPercentage:.5}))},
     options:{indexAxis:'y',scales:{x:{stacked:true,display:false,max:total},y:{stacked:true,display:false}},
       plugins:{legend:{position:'bottom',labels:{color:MUT,boxWidth:9,boxHeight:9,padding:16,font:{size:11}}},
-        tooltip:{backgroundColor:'#161618',borderColor:LINE,borderWidth:1,padding:10,
-          titleColor:INK,bodyColor:MUT,displayColors:false,
-          callbacks:{title:c=>c[0].dataset.label,
-            label:c=>(c.raw/total*100).toFixed(1)+'%  ·  '+fmt(c.raw)+' calls'}}},
+        tooltip:{...tip,callbacks:{title:c=>c[0].dataset.label,
+          label:c=>(c.raw/total*100).toFixed(1)+'%  ·  '+fmt(c.raw)+' calls'}}},
       maintainAspectRatio:false}
   });
 
@@ -335,12 +334,9 @@ fetch('./data.json').then(r=>r.json()).then(D=>{
     type:'bar',
     data:{labels:D.hours.map(h=>String(h.hour).padStart(2,'0')),
       datasets:[{data:D.hours.map(h=>h.count),
-        backgroundColor:D.hours.map(h=>(h.hour>=23||h.hour<6)?'#5a4d2e':ACC),
-        borderRadius:1.5}]},
+        backgroundColor:D.hours.map(h=>(h.hour>=23||h.hour<6)?'#b9b7ac':INK),borderRadius:0}]},
     options:{plugins:{legend:{display:false},
-      tooltip:{backgroundColor:'#161618',borderColor:LINE,borderWidth:1,padding:10,
-        titleColor:INK,bodyColor:MUT,displayColors:false,
-        callbacks:{title:c=>c[0].label+':00',label:c=>fmt(c.raw)+' events'}}},
+      tooltip:{...tip,callbacks:{title:c=>c[0].label+':00',label:c=>fmt(c.raw)+' events'}}},
       scales:{x:{...axis,ticks:{color:DIM}},y:{...axis,ticks:{color:DIM,callback:fmt,maxTicksLimit:4}}},
       maintainAspectRatio:false}
   });
